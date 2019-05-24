@@ -63,16 +63,16 @@ const HOST = process.env.HOST || '0.0.0.0';
 if (process.env.HOST) {
   console.log(
     chalk.cyan(
-      `Attempting to bind to HOST environment variable: ${chalk.yellow(
+      `尝试绑定到 HOST 环境变量: ${chalk.yellow(
         chalk.bold(process.env.HOST)
       )}`
     )
   );
   console.log(
-    `If this was unintentional, check that you haven't mistakenly set it in your shell.`
+    `如果这是无意的, 请检查您没有错误地将其设置在 shell 中。`
   );
   console.log(
-    `Learn more here: ${chalk.yellow('https://bit.ly/CRA-advanced-config')}`
+    `点击此处了解更多信息: ${chalk.yellow('https://bit.ly/CRA-advanced-config')}`
   );
   console.log();
 }
@@ -136,13 +136,13 @@ checkBrowsers(paths.appPath, isInteractive)
       if (process.env.NODE_PATH) {
         console.log(
           chalk.yellow(
-            'Setting NODE_PATH to resolve modules absolutely has been deprecated in favor of setting baseUrl in jsconfig.json (or tsconfig.json if you are using TypeScript) and will be removed in a future major release of create-react-app.'
+            '设置 NODE_PATH 来解析模块(resolve modules)已弃用，替代方法是在 jsconfig.json 中设置 baseUrl (如果你使用 TypeScript，则设置 tsconfig.json) 。在将来的 create-react-app 主要版本将会删除 NODE_PATH 设置的方法'
           )
         );
         console.log();
       }
 
-      console.log(chalk.cyan('Starting the development server...\n'));
+      console.log(chalk.cyan('正在启动开发服务器...\n'));
       openBrowser(urls.localUrlForBrowser);
     });
 

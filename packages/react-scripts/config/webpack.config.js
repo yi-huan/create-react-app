@@ -124,6 +124,16 @@ module.exports = function(webpackEnv) {
         },
       });
     }
+    // 为每个 scss 文件的前面 导入文件（用于加载 '变量' 及 'mixin'）
+    if ('sass-loader' === preProcessor) {
+      loaders.push({
+        loader: 'sass-resources-loader',
+        options: {
+          // 文件路径
+          resources: path.resolve(paths.appSrc, './assets/scss/core/index.scss'),
+        },
+      });
+    }
     return loaders;
   };
 
@@ -282,6 +292,19 @@ module.exports = function(webpackEnv) {
         // Support React Native Web
         // https://www.smashingmagazine.com/2016/08/a-glimpse-into-the-future-with-react-native-for-web/
         'react-native': 'react-native-web',
+        // 自定义增加的
+        // src 目录
+        '@': paths.appSrc,
+        '@assets': path.resolve(paths.appSrc, './assets'),
+        '@scss': path.resolve(paths.appSrc, './assets/scss'),
+        '@scssPage': path.resolve(paths.appSrc, './assets/scss/page'),
+        '@scssModel': path.resolve(paths.appSrc, './assets/scss/model'),
+        '@images': path.resolve(paths.appSrc, './assets/images'),
+        '@media': path.resolve(paths.appSrc, './assets/media'),
+        '@components': path.resolve(paths.appSrc, './components'),
+        '@pages': path.resolve(paths.appSrc, './pages'),
+        '@templates': path.resolve(paths.appSrc, './templates'),
+        '@common': path.resolve(paths.appSrc, './common'),
       },
       plugins: [
         // Adds support for installing with Plug'n'Play, leading to faster installs and adding

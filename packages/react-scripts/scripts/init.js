@@ -19,7 +19,7 @@ const path = require('path');
 const chalk = require('react-dev-utils/chalk');
 const execSync = require('child_process').execSync;
 const spawn = require('react-dev-utils/crossSpawn');
-const { defaultBrowsers } = require('react-dev-utils/browsersHelper');
+// const { defaultBrowsers } = require('react-dev-utils/browsersHelper');
 const os = require('os');
 const verifyTypeScriptSetup = require('./utils/verifyTypeScriptSetup');
 
@@ -99,6 +99,7 @@ module.exports = function(
     build: 'react-scripts build',
     test: 'react-scripts test',
     eject: 'react-scripts eject',
+    analyze: 'source-map-explorer "build/static/js/*.js"',
   };
 
   // Setup the eslint config
@@ -107,7 +108,21 @@ module.exports = function(
   };
 
   // Setup the browsers list
-  appPackage.browserslist = defaultBrowsers;
+  // appPackage.browserslist = defaultBrowsers;
+
+  // 使用自定义的 browserslist
+  appPackage.browserslist = {
+    production: ['>0.1%', 'not dead', 'not op_mini all'],
+    development: [
+      'last 1 chrome version',
+      'last 1 firefox version',
+      'last 1 safari version',
+    ],
+  };
+
+  // 打包的文件使用相对路径
+  appPackage.homepage = '.';
+
 
   fs.writeFileSync(
     path.join(appPath, 'package.json'),
@@ -130,7 +145,7 @@ module.exports = function(
     fs.copySync(templatePath, appPath);
   } else {
     console.error(
-      `Could not locate supplied template: ${chalk.green(templatePath)}`
+      `找不到提供的模板：${chalk.green(templatePath)}`
     );
     return;
   }
@@ -166,7 +181,7 @@ module.exports = function(
   }
   args.push('react', 'react-dom');
 
-  // Install additional template dependencies, if present
+  // 安装其他模板依赖项 (如果存在)
   const templateDependenciesPath = path.join(
     appPath,
     '.template.dependencies.json'
@@ -185,12 +200,12 @@ module.exports = function(
   // which doesn't install react and react-dom along with react-scripts
   // or template is presetend (via --internal-testing-template)
   if (!isReactInstalled(appPackage) || template) {
-    console.log(`Installing react and react-dom using ${command}...`);
+    console.log(`正在使用  ${command}... 安装 react, react-dom 和 react-app-polyfill`);
     console.log();
 
     const proc = spawn.sync(command, args, { stdio: 'inherit' });
     if (proc.status !== 0) {
-      console.error(`\`${command} ${args.join(' ')}\` failed`);
+      console.error(`\`${command} ${args.join(' ')}\` 失败`);
       return;
     }
   }
@@ -201,7 +216,7 @@ module.exports = function(
 
   if (tryGitInit(appPath)) {
     console.log();
-    console.log('Initialized a git repository.');
+    console.log('已初始化 git 存储库');
   }
 
   // Display the most elegant way to cd.
@@ -218,31 +233,31 @@ module.exports = function(
   const displayedCommand = useYarn ? 'yarn' : 'npm';
 
   console.log();
-  console.log(`Success! Created ${appName} at ${appPath}`);
-  console.log('Inside that directory, you can run several commands:');
+  console.log(`√ 已成功在 ${appPath} 上创建了 ${appName}！`);
+  console.log('在该目录中, 您可以运行多个命令:');
   console.log();
   console.log(chalk.cyan(`  ${displayedCommand} start`));
-  console.log('    Starts the development server.');
+  console.log('    启动开发服务器');
   console.log();
   console.log(
     chalk.cyan(`  ${displayedCommand} ${useYarn ? '' : 'run '}build`)
   );
-  console.log('    Bundles the app into static files for production.');
+  console.log('    将 app 打包为静态文件以用于正式环境.');
   console.log();
   console.log(chalk.cyan(`  ${displayedCommand} test`));
-  console.log('    Starts the test runner.');
+  console.log('    启动测试运行程序');
   console.log();
   console.log(
     chalk.cyan(`  ${displayedCommand} ${useYarn ? '' : 'run '}eject`)
   );
   console.log(
-    '    Removes this tool and copies build dependencies, configuration files'
+    '    删除此工具并将"构建依赖项（dependencies）"、"配置文件"和"脚本（scripts）"复制到 app 目录中。'
   );
   console.log(
-    '    and scripts into the app directory. If you do this, you can’t go back!'
+    '    单向操作。如果这样做，将不能回退到原状态。'
   );
   console.log();
-  console.log('We suggest that you begin by typing:');
+  console.log('建议从下面命令开始：');
   console.log();
   console.log(chalk.cyan('  cd'), cdpath);
   console.log(`  ${chalk.cyan(`${displayedCommand} start`)}`);
@@ -250,12 +265,12 @@ module.exports = function(
     console.log();
     console.log(
       chalk.yellow(
-        'You had a `README.md` file, we renamed it to `README.old.md`'
+        '原目录下有一个 `README.md` 文件, 现已将其重命名为 `README.old.md`'
       )
     );
   }
   console.log();
-  console.log('Happy hacking!');
+  console.log('👻 快乐编码 🐔');
 };
 
 function isReactInstalled(appPackage) {

@@ -83,23 +83,23 @@ checkBrowsers(paths.appPath, isInteractive)
   .then(
     ({ stats, previousFileSizes, warnings }) => {
       if (warnings.length) {
-        console.log(chalk.yellow('Compiled with warnings.\n'));
+        console.log(chalk.yellow('编译警告。\n'));
         console.log(warnings.join('\n\n'));
         console.log(
-          '\nSearch for the ' +
+          '\n搜索 ' +
             chalk.underline(chalk.yellow('keywords')) +
-            ' to learn more about each warning.'
+            ' 以了解有关每个警告的详细信息。'
         );
         console.log(
-          'To ignore, add ' +
+          '若要忽略，请在前面的行上添加 ' +
             chalk.cyan('// eslint-disable-next-line') +
-            ' to the line before.\n'
+            ' \n'
         );
       } else {
-        console.log(chalk.green('Compiled successfully.\n'));
+        console.log(chalk.green('编译成功。\n'));
       }
 
-      console.log('File sizes after gzip:\n');
+      console.log('gzip 后的文件大小：\n');
       printFileSizesAfterBuild(
         stats,
         previousFileSizes,
@@ -122,7 +122,7 @@ checkBrowsers(paths.appPath, isInteractive)
       );
     },
     err => {
-      console.log(chalk.red('Failed to compile.\n'));
+      console.log(chalk.red('编译失败。\n'));
       printBuildError(err);
       process.exit(1);
     }
@@ -142,13 +142,13 @@ function build(previousFileSizes) {
   if (process.env.NODE_PATH) {
     console.log(
       chalk.yellow(
-        'Setting NODE_PATH to resolve modules absolutely has been deprecated in favor of setting baseUrl in jsconfig.json (or tsconfig.json if you are using TypeScript) and will be removed in a future major release of create-react-app.'
+        '设置 NODE_PATH 来解析模块(resolve modules)已弃用，替代方法是在 jsconfig.json 中设置 baseUrl (如果你使用 TypeScript，则设置 tsconfig.json) 。在将来的 create-react-app 主要版本将会删除 NODE_PATH 设置的方法'
       )
     );
     console.log();
   }
 
-  console.log('Creating an optimized production build...');
+  console.log('创建优化的生产构建...');
 
   const compiler = webpack(config);
   return new Promise((resolve, reject) => {
@@ -183,8 +183,8 @@ function build(previousFileSizes) {
       ) {
         console.log(
           chalk.yellow(
-            '\nTreating warnings as errors because process.env.CI = true.\n' +
-              'Most CI servers set it automatically.\n'
+            '\n将警告视为错误，因为 process.env.CI = true\n' +
+              '大多数 CI 服务器会自动设置它。\n'
           )
         );
         return reject(new Error(messages.warnings.join('\n\n')));
